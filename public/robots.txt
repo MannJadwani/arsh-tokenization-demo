@@ -1,0 +1,37 @@
+User-agent: *
+Allow: /
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Disallow admin and sensitive areas
+Disallow: /admin
+Disallow: /api/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /src/
+
+# Allow important pages
+Allow: /marketplace
+Allow: /home
+Allow: /wallet
+Allow: /property/
+Allow: /login
+Allow: /signup
+Allow: /kyc
+
+# Sitemap location
+Sitemap: https://arsh-tokenizer.com/sitemap.xml
+
+# Crawl delay (in seconds)
+Crawl-delay: 1 
