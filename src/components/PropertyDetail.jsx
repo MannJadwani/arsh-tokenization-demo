@@ -13,6 +13,7 @@ import {
   Minus,
   Plus
 } from 'lucide-react';
+import PaymentModal from './ui/PaymentModal';
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const PropertyDetail = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showBuyModal, setShowBuyModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [tokenQuantity, setTokenQuantity] = useState(1);
 
   useEffect(() => {
@@ -127,7 +129,13 @@ const PropertyDetail = () => {
     // Show success message and close modal
     alert(`Successfully purchased ${tokenQuantity} tokens for ₹${totalCost.toLocaleString()}!`);
     setShowBuyModal(false);
+    setShowPaymentModal(false);
     setTokenQuantity(1);
+  };
+
+  const handleProceedToPayment = () => {
+    setShowBuyModal(false);
+    setShowPaymentModal(true);
   };
 
   const adjustQuantity = (change) => {
@@ -282,13 +290,34 @@ const PropertyDetail = () => {
                   <span className="text-gray-300">Available:</span>
                   <span className="font-semibold">{availableTokens.toLocaleString()} tokens</span>
                 </div>
-                <button
-                  onClick={() => setShowBuyModal(true)}
-                  disabled={availableTokens === 0}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200"
-                >
-                  {availableTokens === 0 ? 'Fully Funded' : 'Buy Tokens'}
-                </button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setShowBuyModal(true)}
+                    disabled={availableTokens === 0}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200"
+                  >
+                    {availableTokens === 0 ? 'Fully Funded' : 'Quick Buy'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate('/billing', {
+                        state: {
+                          orderDetails: {
+                            propertyId: property.id,
+                            propertyName: property.name,
+                            quantity: 1,
+                            pricePerToken: property.pricePerToken,
+                            totalAmount: property.pricePerToken
+                          }
+                        }
+                      });
+                    }}
+                    disabled={availableTokens === 0}
+                    className="bg-gray-700 hover:bg-gray-600 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 border border-gray-600"
+                  >
+                    {availableTokens === 0 ? 'Fully Funded' : 'Detailed Checkout'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -368,15 +397,30 @@ const PropertyDetail = () => {
                   Cancel
                 </button>
                 <button
-                  onClick={handleBuyTokens}
+                  onClick={handleProceedToPayment}
                   className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200"
                 >
-                  Buy Now
+                  Proceed to Payment
                 </button>
               </div>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Payment Modal */}
+      {showPaymentModal && (
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          orderDetails={{
+            propertyName: property.name,
+            quantity: tokenQuantity,
+            pricePerToken: property.pricePerToken,
+            totalAmount: tokenQuantity * property.pricePerToken
+          }}
+          onPaymentSuccess={handleBuyTokens}
+        />
       )}
     </div>
   );

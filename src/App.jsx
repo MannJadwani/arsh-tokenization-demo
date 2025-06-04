@@ -9,6 +9,7 @@ import Marketplace from './components/Marketplace';
 import PropertyDetail from './components/PropertyDetail';
 import Wallet from './components/Wallet';
 import Admin from './components/Admin';
+import Billing from './components/Billing';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/property/:id" element={<PropertyDetail />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/billing" element={<Billing />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
