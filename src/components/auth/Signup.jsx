@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, User, Phone, Building2, ArrowRight, Shield, CheckCircle, Star } from 'lucide-react';
 
 const Signup = () => {
@@ -15,6 +16,7 @@ const Signup = () => {
     agreeToTerms: false,
     agreeToUpdates: false
   });
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -25,9 +27,11 @@ const Signup = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (currentStep < 2) {
-      setCurrentStep(currentStep + 1);
-    } else {      // Mock signup logic - save to localStorage
+    
+    if (currentStep === 1 && isStep1Valid) {
+      setCurrentStep(2);
+    } else if (currentStep === 2 && isStep2Valid) {
+      // Create user account
       const userData = {
         id: Date.now(),
         firstName: formData.firstName,
@@ -36,18 +40,16 @@ const Signup = () => {
         phone: formData.phone,
         kyc: 'pending',
         createdAt: new Date().toISOString(),
-        isAuthenticated: true
+        isAuthenticated: false
       };
       
-      // Save user data to localStorage
       localStorage.setItem('userAuth', JSON.stringify(userData));
-      localStorage.setItem('isLoggedIn', 'true');
       
       console.log('Signup successful:', userData);
       alert('Account created successfully! Please complete KYC verification.');
       
       // Redirect to KYC page
-      window.location.href = '/kyc';
+      navigate('/kyc');
     }
   };
 
@@ -339,9 +341,9 @@ const Signup = () => {
           <div className="text-center">
             <p className="text-gray-400">
               Already have an account?{' '}
-              <a href="/login" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+              <Link to="/login" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
                 Sign in here
-              </a>
+              </Link>
             </p>
           </div>
         </div>

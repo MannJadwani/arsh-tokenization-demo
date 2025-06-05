@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronRight, Shield, TrendingUp, Zap, Eye, Droplets, Users, Building2, Star, Lock, CheckCircle, ArrowRight } from 'lucide-react';
 
 const Landing = () => {
@@ -61,11 +62,11 @@ const Landing = () => {
               </div>
             </div>
               <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-              <a href="/signup" className="group relative bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 px-12 py-5 rounded-2xl text-xl font-bold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 flex items-center justify-center overflow-hidden">
+              <Link to="/signup" className="group relative bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 px-12 py-5 rounded-2xl text-xl font-bold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                 <span className="relative z-10">Get Started</span>
                 <ArrowRight className="ml-3 h-6 w-6 relative z-10 transition-transform group-hover:translate-x-1" />
-              </a>
+              </Link>
               <a href="#marketplace" className="group border-2 border-gray-600 hover:border-blue-500/50 bg-gray-900/50 hover:bg-blue-900/20 px-12 py-5 rounded-2xl text-xl font-bold transition-all duration-300 backdrop-blur-sm">
                 <span className="bg-gradient-to-r from-gray-300 to-white bg-clip-text text-transparent group-hover:from-blue-300 group-hover:to-purple-300">
                   Explore Marketplace
@@ -525,9 +526,9 @@ const Landing = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-8">
             Ready to own a piece of India's fastest‑growing cities?
           </h2>          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/signup" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-105">
+            <Link to="/signup" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-105">
               Create Your Free Account
-            </a>
+            </Link>
             <button className="border border-gray-600 hover:border-gray-500 px-8 py-4 rounded-xl text-lg font-semibold transition-colors">
               Contact Support
             </button>

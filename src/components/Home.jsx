@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Building2, TrendingUp, Wallet, PieChart, BarChart3, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 const Home = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  
   useEffect(() => {
     // Check if user is authenticated
     const isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -13,10 +16,10 @@ const Home = () => {
       setUser(JSON.parse(userAuth));
     } else {
       // Redirect to login if not authenticated
-      window.location.href = '/login';
+      navigate('/login');
     }
     setLoading(false);
-  }, []);
+  }, [navigate]);
 
   if (loading) {
     return (

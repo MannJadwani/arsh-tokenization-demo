@@ -39,6 +39,10 @@ const Kyc = () => {
       };
       
       localStorage.setItem('userAuth', JSON.stringify(updatedUser));
+      
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new Event('authChange'));
+      
       setUser(updatedUser);
       setKycCompleted(true);
       setIsLoading(false);

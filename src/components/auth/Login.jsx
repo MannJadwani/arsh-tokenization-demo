@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, Building2, ArrowRight, Shield, CheckCircle } from 'lucide-react';
 
 const Login = () => {
@@ -7,6 +8,7 @@ const Login = () => {
     email: '',
     password: ''
   });
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setFormData({
@@ -34,14 +36,17 @@ const Login = () => {
         localStorage.setItem('userAuth', JSON.stringify(updatedUser));
         localStorage.setItem('isLoggedIn', 'true');
         
+        // Dispatch custom event to notify other components
+        window.dispatchEvent(new Event('authChange'));
+        
         console.log('Login successful:', updatedUser);
         alert('Login successful!');
         
         // Check KYC status and redirect accordingly
         if (updatedUser.kyc === 'approved') {
-          window.location.href = '/home';
+          navigate('/home');
         } else {
-          window.location.href = '/kyc';
+          navigate('/kyc');
         }
       } else {
         alert('Invalid email or password');
@@ -61,9 +66,12 @@ const Login = () => {
       localStorage.setItem('userAuth', JSON.stringify(userData));
       localStorage.setItem('isLoggedIn', 'true');
       
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new Event('authChange'));
+      
       console.log('Login successful (new user):', userData);
       alert('Login successful! Please complete KYC verification.');
-      window.location.href = '/kyc';
+      navigate('/kyc');
     } else {
       alert('Please enter valid credentials');
     }
@@ -187,9 +195,9 @@ const Login = () => {
           <div className="text-center">
             <p className="text-gray-400">
               Don't have an account?{' '}
-              <a href="/signup" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+              <Link to="/signup" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
                 Create one now
-              </a>
+              </Link>
             </p>
           </div>
         </div>

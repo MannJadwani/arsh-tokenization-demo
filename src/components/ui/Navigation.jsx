@@ -14,8 +14,7 @@ const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    // Check authentication status
+  const checkAuthStatus = () => {
     const authStatus = localStorage.getItem('isLoggedIn');
     const userAuth = localStorage.getItem('userAuth');
     
@@ -26,6 +25,33 @@ const Navigation = () => {
       setIsLoggedIn(false);
       setUser(null);
     }
+  };
+
+  useEffect(() => {
+    // Check authentication status on mount and route changes
+    checkAuthStatus();
+  }, [location.pathname]); // Added location.pathname as dependency
+
+  useEffect(() => {
+    // Listen for storage changes (when localStorage is updated from other tabs/components)
+    const handleStorageChange = (e) => {
+      if (e.key === 'isLoggedIn' || e.key === 'userAuth') {
+        checkAuthStatus();
+      }
+    };
+
+    // Listen for custom events (for same-tab localStorage changes)
+    const handleAuthChange = () => {
+      checkAuthStatus();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('authChange', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('authChange', handleAuthChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -45,6 +71,10 @@ const Navigation = () => {
   const handleLogout = () => {
     localStorage.removeItem('userAuth');
     localStorage.removeItem('isLoggedIn');
+    
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event('authChange'));
+    
     setIsLoggedIn(false);
     setUser(null);
     setIsProfileOpen(false);
@@ -282,7 +312,7 @@ const Navigation = () => {
       {showAdminLink && (
         <div className="fixed bottom-4 right-4 z-50">
           <button
-            onClick={() => handleNavigation('/admin')}
+            onClick={() => handleNavigation('/admin?admin=1')}
             className="bg-gradient-to-r from-red-600 to-purple-600 hover:from-red-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg transition-all duration-200 font-medium shadow-lg"
           >
             Admin Panel
